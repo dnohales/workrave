@@ -1,6 +1,6 @@
 // TimerBoxPreferencePage.cc --- Preferences widgets for a timer
 //
-// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008 Rob Caelers & Raymond Penners
+// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2011 Rob Caelers & Raymond Penners
 // All rights reserved.
 //
 // This program is free software: you can redistribute it and/or modify
@@ -88,7 +88,7 @@ void
 TimerBoxPreferencePage::create_page()
 {
   // Placement
-  place_button  = Gtk::manage(new Gtk::OptionMenu());
+  place_button  = Gtk::manage(new Gtk::ComboBox());
   Gtk::Menu *place_menu = Gtk::manage(new Gtk::Menu());
   Gtk::Menu::MenuList &place_items = place_menu->items();
   place_button->set_menu(*place_menu);
@@ -112,7 +112,7 @@ TimerBoxPreferencePage::create_page()
   // Timer display
   for (int i = 0; i < BREAK_ID_SIZEOF; i++)
     {
-      Gtk::OptionMenu *display_button  = Gtk::manage(new Gtk::OptionMenu());
+      Gtk::ComboBox *display_button  = Gtk::manage(new Gtk::ComboBox());
       timer_display_button[i] = display_button;
 
       Gtk::Menu *menu = Gtk::manage(new Gtk::Menu());

@@ -1,6 +1,6 @@
 // IconListCellRenderer.cc --- Icon list cell renderer
 //
-// Copyright (C) 2001, 2002, 2003, 2007 Rob Caelers & Raymond Penners
+// Copyright (C) 2001, 2002, 2003, 2007, 2011 Rob Caelers & Raymond Penners
 // All rights reserved.
 //
 // This program is free software: you can redistribute it and/or modify
@@ -17,8 +17,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include <gtk/gtkcellrenderer.h>
-#include <gtkmm/cellrenderer.h>
+#include <gtk/gtk.h>
+#include <gtkmm.h>
 
 #include "debug.hh"
 
@@ -120,7 +120,7 @@ IconListCellRenderer::render_vfunc(
                                    Gtk::CellRendererState flags)
 {
   update_properties();
-#if 1
+
   GdkRectangle text_area;
   GdkRectangle pixbuf_area;
   int width, height;
@@ -156,33 +156,5 @@ IconListCellRenderer::render_vfunc(
                             &text_area,
                             (GdkRectangle*)expose_area.gobj(),
                             (GtkCellRendererState)  flags);
-#endif
-#if 0
-  const unsigned int cell_xpad = property_xpad();
-  const unsigned int cell_ypad = property_ypad();
-
-  int x_offset = 0, y_offset = 0, width = 0, height = 0;
-  get_size(widget, cell_area, x_offset, y_offset, width, height);
-
-  width  -= cell_xpad * 2;
-  height -= cell_ypad * 2;
-
-  if(width <= 0 || height <= 0)
-    return;
-
-  Gtk::StateType state = state = Gtk::STATE_NORMAL;
-
-  if((flags & Gtk::CELL_RENDERER_SELECTED) != 0)
-    state = (widget.has_focus()) ? Gtk::STATE_SELECTED : Gtk::STATE_ACTIVE;
-
-  const Gtk::ShadowType shadow = (property_active_) ? Gtk::SHADOW_IN : Gtk::SHADOW_OUT;
-
-  widget.get_style()->paint_check(
-                                  window, state, shadow,
-                                  cell_area, widget, "cellcheck",
-                                  cell_area.get_x() + x_offset + cell_xpad,
-                                  cell_area.get_y() + y_offset + cell_ypad,
-                                  width - 1, height - 1);
-#endif
 }
 

@@ -1,6 +1,6 @@
 // DataConnector.cc --- Connect Gtkmm widget with Configuration items
 //
-// Copyright (C) 2007, 2008 Rob Caelers <robc@krandor.nl>
+// Copyright (C) 2007, 2008, 2011 Rob Caelers <robc@krandor.nl>
 // All rights reserved.
 //
 // This program is free software: you can redistribute it and/or modify
@@ -26,11 +26,7 @@
 #include "nls.h"
 #include "debug.hh"
 
-#include <gtkmm/entry.h>
-#include <gtkmm/spinbutton.h>
-#include <gtkmm/checkbutton.h>
-#include <gtkmm/optionmenu.h>
-#include <gtkmm/adjustment.h>
+#include <gtkmm.h>
 #include "TimeEntry.hh"
 
 #include "DataConnector.hh"
@@ -45,7 +41,7 @@ using namespace std;
 DEFINE_DATA_TYPE(Gtk::Entry, DataConnectionGtkEntry);
 DEFINE_DATA_TYPE(Gtk::CheckButton, DataConnectionGtkCheckButton);
 DEFINE_DATA_TYPE(Gtk::SpinButton, DataConnectionGtkSpinButton);
-DEFINE_DATA_TYPE(Gtk::OptionMenu, DataConnectionGtkOptionMenu);
+DEFINE_DATA_TYPE(Gtk::ComboBox, DataConnectionGtkComboBox);
 DEFINE_DATA_TYPE(Gtk::Adjustment, DataConnectionGtkAdjustment);
 DEFINE_DATA_TYPE(TimeEntry, DataConnectionTimeEntry);
 
@@ -321,17 +317,17 @@ DataConnectionGtkCheckButton::config_changed_notify(const string &key)
 
 //! Initialize connection.
 void
-DataConnectionGtkOptionMenu::init()
+DataConnectionGtkComboBox::init()
 {
   widget->signal_changed()
-    .connect(sigc::mem_fun(*this, &DataConnectionGtkOptionMenu::widget_changed_notify));
+    .connect(sigc::mem_fun(*this, &DataConnectionGtkComboBox::widget_changed_notify));
   config_changed_notify(key);
 }
 
 
 //! Configuration item changed value.
 void
-DataConnectionGtkOptionMenu::widget_changed_notify()
+DataConnectionGtkComboBox::widget_changed_notify()
 {
   bool skip = false;
 
@@ -342,7 +338,7 @@ DataConnectionGtkOptionMenu::widget_changed_notify()
 
   if (!skip)
     {
-      int value = widget->get_history();
+      int value = widget->get_active_row_number();
 
       config->set_value(key, value);
     }
@@ -350,7 +346,7 @@ DataConnectionGtkOptionMenu::widget_changed_notify()
 
 //! Configuration item changed value.
 void
-DataConnectionGtkOptionMenu::config_changed_notify(const string &key)
+DataConnectionGtkComboBox::config_changed_notify(const string &key)
 {
   bool skip = false;
   if (!intercept.empty())
@@ -363,7 +359,7 @@ DataConnectionGtkOptionMenu::config_changed_notify(const string &key)
       int value;
       if (config->get_value(key, value))
         {
-          widget->set_history(value);
+          widget->set_active(value);
         }
     }
 }
@@ -511,7 +507,20 @@ DataConnectionGtkEntryTwin::widget_changed_notify()
       string value1 = widget1->get_text();
       string value2 = widget2->get_text();
       bool verified = true;
-      
+
+#ifdef HAVE_GTK3      
+      if (value1 == value2)
+        {
+          widget1->unset_background_color();
+          widget2->unset_background_color();
+        }
+      else
+        {
+          widget1->override_background_color(Gdk::RGBA("orange"));
+          widget2->override_background_color(Gdk::RGBA("orange"));
+          verified = false;
+        }
+#else
       if (value1 == value2)
         {
           widget1->unset_base(Gtk::STATE_NORMAL);
@@ -523,6 +532,7 @@ DataConnectionGtkEntryTwin::widget_changed_notify()
           widget2->modify_base(Gtk::STATE_NORMAL, Gdk::Color("orange"));
           verified = false;
         }
+#endif
       
       if (verified)
         {

@@ -396,18 +396,41 @@ AC_SUBST(GLIB_CFLAGS)
 
 dnl
 dnl GTK
-dnl
+dnlo
 
 if test "x$config_gtk" = "xyes"
 then
-    PKG_CHECK_MODULES(GTK,
-                      gtk+-2.0 >= 2.6.0 \
-                      gdk-2.0 >= 2.8 \
-                      sigc++-2.0 \
-                      glibmm-2.4 >= 2.10 \
-                      gtkmm-2.4 >= 2.10)
+   have_gtk3=no
+   if test "x$config_experimental" = "xyes"; then
+      PKG_CHECK_MODULES(GTK,
+			glib-2.0 >= 2.28.0
+			gtk+-3.0 >= 3.0.0
+			gdk-3.0 >= 3.0.0
+                        sigc++-2.0 >= 2.2.4.2
+                        glibmm-2.4 >= 2.27.93
+                        gtkmm-3.0 >= 2.99.4,
+			have_gtk3=yes,
+			have_gtk3=no)
+      if test x$have_gtk3 = xyes
+      then
+	  AC_DEFINE(HAVE_GTK3, 1, Support for GTK3)
+          CFLAGS="${CFLAGS} -DGTK_DISABLE_SINGLE_INCLUDES_XX  -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGSEAL_ENABLE"
+          CXXFLAGS="${CXXFLAGS} -DGTK_DISABLE_SINGLE_INCLUDES_XX  -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGSEAL_ENABLE"
+      fi
+   fi
+
+   if test x$have_gtk3 = xno
+   then
+      PKG_CHECK_MODULES(GTK,
+                        gtk+-2.0 >= 2.6.0 \
+                        gdk-2.0 >= 2.8 \
+                        sigc++-2.0 \
+                        glibmm-2.4 >= 2.10 \
+                        gtkmm-2.4 >= 2.10)
+   fi
 fi
 
+AM_CONDITIONAL(HAVE_GTK3, test "x$have_gtk3" = "xyes")
 AC_SUBST(GTK_LIBS)
 AC_SUBST(GTK_CFLAGS)
 

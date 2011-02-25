@@ -1,6 +1,6 @@
 // WindowHints.cc
 //
-// Copyright (C) 2001 - 2008 Rob Caelers & Raymond Penners
+// Copyright (C) 2001 - 2008, 2011 Rob Caelers & Raymond Penners
 // All rights reserved.
 //
 // This program is free software: you can redistribute it and/or modify
@@ -35,7 +35,7 @@
 
 #ifdef PLATFORM_OS_WIN32
 #include <windows.h>
-#include <gtk/gtkwindow.h>
+#include <gtk.h>
 #include <gdk/gdkwin32.h>
 #include "Harpoon.hh"
 #ifdef PLATFORM_OS_WIN32_NATIVE

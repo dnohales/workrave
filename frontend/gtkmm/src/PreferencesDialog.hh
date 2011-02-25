@@ -1,6 +1,6 @@
 // PreferencesDialog.hh --- Preferences Dialog
 //
-// Copyright (C) 2002, 2003, 2004, 2006, 2007, 2008, 2010 Raymond Penners <raymond@dotsphinx.com>
+// Copyright (C) 2002, 2003, 2004, 2006, 2007, 2008, 2010, 2011 Raymond Penners <raymond@dotsphinx.com>
 // All rights reserved.
 //
 // This program is free software: you can redistribute it and/or modify
@@ -31,17 +31,14 @@
 
 #include "SoundPlayer.hh"
 
-#include <gtkmm/treemodel.h>
-#include <gtkmm/treemodelcolumn.h>
-#include <gtkmm/combobox.h>
-#include <gtkmm/liststore.h>
+#include <gtkmm.h>
 
 class TimeEntry;
 class DataConnector;
 
 namespace Gtk
 {
-  class OptionMenu;
+  class ComboBox;
   class ComboBox;
   class FileChooserButton;
   class HScale;
@@ -74,9 +71,9 @@ private:
   void on_sound_changed();
   void on_block_changed();
 
-  Gtk::OptionMenu *sound_button;
-  Gtk::OptionMenu *block_button;
-  Gtk::OptionMenu *sound_theme_button;
+  Gtk::ComboBox *sound_button;
+  Gtk::ComboBox *block_button;
+  Gtk::ComboBox *sound_theme_button;
   
   // Mode before focus in.
   OperationMode mode;

@@ -10,7 +10,7 @@ HigDialog::HigDialog()
 
 HigDialog::HigDialog(const Glib::ustring& title, bool modal,
                      bool use_separator)
-  : Gtk::Dialog(title, modal, use_separator)
+  : Gtk::Dialog(title, modal) // FIXME: GTK3 deprecated, use_separator)
 {
   set_hig_defaults();
   vbox = NULL;

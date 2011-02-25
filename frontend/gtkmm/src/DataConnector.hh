@@ -1,6 +1,6 @@
 // DataConnector.hh --- Connect widget with the configurator
 //
-// Copyright (C) 2007, 2008 Rob Caelers <robc@krandor.nl>
+// Copyright (C) 2007, 2008, 2011 Rob Caelers <robc@krandor.nl>
 // All rights reserved.
 //
 // This program is free software: you can redistribute it and/or modify
@@ -40,7 +40,7 @@ namespace Gtk
   class Widget;
   class Entry;
   class SpinButton;
-  class OptionMenu;
+  class ComboBox;
   class Adjustment;
 }
 
@@ -158,7 +158,7 @@ protected:
 DECLARE_DATA_TYPE(Gtk::Entry, DataConnectionGtkEntry, std::string);
 DECLARE_DATA_TYPE(Gtk::CheckButton, DataConnectionGtkCheckButton, bool);
 DECLARE_DATA_TYPE(Gtk::SpinButton, DataConnectionGtkSpinButton, int);
-DECLARE_DATA_TYPE(Gtk::OptionMenu, DataConnectionGtkOptionMenu, int);
+DECLARE_DATA_TYPE(Gtk::ComboBox, DataConnectionGtkComboBox, int);
 DECLARE_DATA_TYPE(Gtk::Adjustment, DataConnectionGtkAdjustment, int);
 DECLARE_DATA_TYPE(TimeEntry, DataConnectionTimeEntry, int);
 

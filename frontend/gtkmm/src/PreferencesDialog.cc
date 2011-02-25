@@ -1,6 +1,6 @@
 // PreferencesDialog.cc --- Preferences dialog
 //
-// Copyright (C) 2002, 2003, 2004, 2006, 2007, 2008, 2009, 2010 Raymond Penners <raymond@dotsphinx.com>
+// Copyright (C) 2002, 2003, 2004, 2006, 2007, 2008, 2009, 2010, 2011 Raymond Penners <raymond@dotsphinx.com>
 // All rights reserved.
 //
 // This program is free software: you can redistribute it and/or modify
@@ -34,7 +34,7 @@
 #include <gtkmm/notebook.h>
 #include <gtkmm/stock.h>
 #include <gtkmm/menu.h>
-#include <gtkmm/optionmenu.h>
+#include <gtkmm/combobox.h>
 #include <gtkmm/cellrenderer.h>
 #include <gtkmm/scale.h>
 #include <gtkmm/scrolledwindow.h>
@@ -161,7 +161,7 @@ Gtk::Widget *
 PreferencesDialog::create_gui_page()
 {
   // Block types
-  block_button  = Gtk::manage(new Gtk::OptionMenu());
+  block_button  = Gtk::manage(new Gtk::ComboBox());
   Gtk::Menu *block_menu = Gtk::manage(new Gtk::Menu());
   Gtk::Menu::MenuList &block_list = block_menu->items();
   block_button->set_menu(*block_menu);
@@ -313,7 +313,7 @@ PreferencesDialog::create_sounds_page()
   panel->pack_start(*hig, false, false, 0);
   
   // Sound types
-  sound_button  = Gtk::manage(new Gtk::OptionMenu());
+  sound_button  = Gtk::manage(new Gtk::ComboBox());
   Gtk::Menu *sound_menu = Gtk::manage(new Gtk::Menu());
   Gtk::Menu::MenuList &sound_list = sound_menu->items();
   sound_button->set_menu(*sound_menu);
@@ -367,7 +367,7 @@ PreferencesDialog::create_sounds_page()
       hig = Gtk::manage(new HigCategoryPanel(_("Sound Events"), true));
       panel->pack_start(*hig, true, true, 0);
   
-      sound_theme_button  = Gtk::manage(new Gtk::OptionMenu());
+      sound_theme_button  = Gtk::manage(new Gtk::ComboBox());
       Gtk::Menu *sound_theme_menu = Gtk::manage(new Gtk::Menu());
       sound_theme_button->set_menu(*sound_theme_menu);
 
