@@ -18,7 +18,6 @@
 ; You should have received a copy of the GNU General Public License
 ; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;
-; $Id$
 
 [Setup]
 AppName=Workrave
@@ -53,8 +52,8 @@ Name: "startupmenu"; Description: "Start Workrave when Windows starts"; GroupDes
 
 [Files]
 Source: "..\..\..\..\common\win32\harpoon\src\Release\harpoon.dll"; DestDir: "{app}\lib"; Flags: ignoreversion recursesubdirs restartreplace uninsrestartdelete;
-;Source: "..\..\..\..\common\win32\harpoon\src\Release\harpoon64.dll"; DestDir: "{app}\lib"; Check: IsWin64; Flags: ignoreversion recursesubdirs restartreplace uninsrestartdelete;
-;Source: "..\..\..\..\common\win32\harpoonHelper\src\Release\harpoonHelper.exe"; DestDir: "{app}\lib"; Check: IsWin64; Flags: ignoreversion recursesubdirs restartreplace uninsrestartdelete;
+Source: "..\..\..\..\common\win32\harpoon\src\Release\harpoon64.dll"; DestDir: "{app}\lib"; Check: IsWin64; Flags: ignoreversion recursesubdirs restartreplace uninsrestartdelete;
+Source: "..\..\..\..\common\win32\harpoonHelper\src\Release\harpoonHelper.exe"; DestDir: "{app}\lib"; Check: IsWin64; Flags: ignoreversion recursesubdirs restartreplace uninsrestartdelete;
 Source: "..\..\..\win32\applet\src\Release\workrave-applet.dll"; DestDir: "{app}\lib"; Check: (not IsWin64); Flags: ignoreversion restartreplace uninsrestartdelete regserver 32bit;
 Source: "..\..\..\win32\applet\src\Release\workrave-applet64.dll"; DestDir: "{app}\lib"; Check: IsWin64; Flags: ignoreversion restartreplace uninsrestartdelete regserver 64bit;
 Source: ".\runtime-base\*.*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs;
@@ -119,9 +118,18 @@ begin
                 mbConfirmation, MB_OKCANCEL) = IDOK then
       begin
         retVal := ZapWorkrave();
-	if not retVal then begin
-	  MsgBox('Failed to close Workrave. Please close Workrave manually.', mbError, MB_OK);
-	  Result := False;
+	if not retVal then
+	begin
+	  winHwnd := FindWindowByWindowName('Workrave');
+	  if winHwnd <> 0 then
+	  begin
+ 	    MsgBox('Failed to close Workrave. Please close Workrave manually.', mbError, MB_OK);
+	    Result := False;
+          end
+	  else
+	  begin
+	    Result := True;
+          end
 	end
       end
     end
