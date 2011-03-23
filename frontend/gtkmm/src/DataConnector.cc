@@ -38,12 +38,12 @@ using namespace workrave;
 using namespace std;
 
 // Define connector for standard gtkmm widgets.
-DEFINE_DATA_TYPE(Gtk::Entry, DataConnectionGtkEntry);
-DEFINE_DATA_TYPE(Gtk::CheckButton, DataConnectionGtkCheckButton);
-DEFINE_DATA_TYPE(Gtk::SpinButton, DataConnectionGtkSpinButton);
-DEFINE_DATA_TYPE(Gtk::ComboBox, DataConnectionGtkComboBox);
-DEFINE_DATA_TYPE(Gtk::Adjustment, DataConnectionGtkAdjustment);
-DEFINE_DATA_TYPE(TimeEntry, DataConnectionTimeEntry);
+DEFINE_DATA_TYPE(Gtk::Entry *, DataConnectionGtkEntry);
+DEFINE_DATA_TYPE(Gtk::CheckButton *, DataConnectionGtkCheckButton);
+DEFINE_DATA_TYPE(Gtk::SpinButton *, DataConnectionGtkSpinButton);
+DEFINE_DATA_TYPE(Gtk::ComboBox *, DataConnectionGtkComboBox);
+DEFINE_DATA_TYPE(Glib::RefPtr<Gtk::Adjustment>, DataConnectionGtkAdjustment);
+DEFINE_DATA_TYPE(TimeEntry *, DataConnectionTimeEntry);
 
 namespace dc
 {

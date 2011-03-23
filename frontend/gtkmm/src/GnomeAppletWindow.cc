@@ -1,6 +1,6 @@
 // GnomeAppletWindow.cc --- Applet info Window
 //
-// Copyright (C) 2001 - 2010 Rob Caelers & Raymond Penners
+// Copyright (C) 2001 - 2011 Rob Caelers & Raymond Penners
 // All rights reserved.
 //
 // This program is free software: you can redistribute it and/or modify
@@ -28,7 +28,7 @@ using namespace std;
 #include "nls.h"
 #include "debug.hh"
 
-#include <gtkmm/alignment.h>
+#include <gtkmm.h>
 
 #include "GnomeAppletWindow.hh"
 
@@ -42,7 +42,7 @@ using namespace std;
 #include "ICore.hh"
 #include "CoreFactory.hh"
 
-#include <gdk/gdkcolor.h>
+#include <gdk/gdk.h>
 #include <gdk/gdkx.h>
 
 #include <X11/X.h>
@@ -365,13 +365,14 @@ GnomeAppletWindow::set_applet_size(int size)
 void
 GnomeAppletWindow::set_applet_background(int type, GdkColor &color, long xid)
 {
+  // TODO:
   TRACE_ENTER_MSG("GnomeAppletWindow::set_applet_background", type << " " << xid 
                   << " " << color.pixel
                   << " " << color.red 
                   << " " << color.green
                   << " " << color.blue
                   );
-
+#ifndef HAVE_GTK3
   if (plug == NULL)
     {
       return;
@@ -448,7 +449,7 @@ GnomeAppletWindow::set_applet_background(int type, GdkColor &color, long xid)
     {
       g_object_unref(G_OBJECT(pixmap));
     }
-
+#endif
   TRACE_EXIT();
 }
 
@@ -473,6 +474,7 @@ GnomeAppletWindow::on_button_press_event(GdkEventButton *event)
 {
   bool ret = false;
 
+#ifndef HAVE_GTK3
   /* Taken from:
    *
    * bonobo-plug.c: a Gtk plug wrapper.
@@ -540,7 +542,7 @@ GnomeAppletWindow::on_button_press_event(GdkEventButton *event)
       gdk_flush();
       gdk_error_trap_pop();
     }
-
+#endif
   return ret;
 }
 

@@ -27,16 +27,21 @@
 #include <math.h>
 #include <string.h>
 
-#include "gtkx.h"
+#include "nls.h"
+
+//#include "gtkx.h"
 #include <X11/Xatom.h>
 #include <cairo-xlib.h>
 
-#include "gtkintl.h"
-#include "gtkprivate.h"
+#include "gtk/gtk.h"
+#include "gdk/gdk.h"
+
+//#include "gtkintl.h"
+//#include "gtkprivate.h"
 #include "gtktrayicon.h"
-#include "gtktestutils.h"
-#include "gtkdebug.h"
-#include "gtktypebuiltins.h"
+//#include "gtktestutils.h"
+//#include "gtkdebug.h"
+//#include "gtktypebuiltins.h"
 
 #define SYSTEM_TRAY_REQUEST_DOCK    0
 #define SYSTEM_TRAY_BEGIN_MESSAGE   1
@@ -126,49 +131,49 @@ wrgtk_tray_icon_class_init (WRGtkTrayIconClass *class)
 						      _("The orientation of the tray"),
 						      GTK_TYPE_ORIENTATION,
 						      GTK_ORIENTATION_HORIZONTAL,
-						      GTK_PARAM_READABLE));
+						      G_PARAM_READABLE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_FG_COLOR,
                                    g_param_spec_boxed ("fg-color",
-                                                       P_("Foreground color"),
-                                                       P_("Foreground color for symbolic icons"),
+                                                       _("Foreground color"),
+                                                       _("Foreground color for symbolic icons"),
                                                        GDK_TYPE_COLOR,
-                                                       GTK_PARAM_READABLE));
+                                                       G_PARAM_READABLE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_ERROR_COLOR,
                                    g_param_spec_boxed ("error-color",
-                                                       P_("Error color"),
-                                                       P_("Error color for symbolic icons"),
+                                                       _("Error color"),
+                                                       _("Error color for symbolic icons"),
                                                        GDK_TYPE_COLOR,
-                                                       GTK_PARAM_READABLE));
+                                                       G_PARAM_READABLE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_WARNING_COLOR,
                                    g_param_spec_boxed ("warning-color",
-                                                       P_("Warning color"),
-                                                       P_("Warning color for symbolic icons"),
+                                                       _("Warning color"),
+                                                       _("Warning color for symbolic icons"),
                                                        GDK_TYPE_COLOR,
-                                                       GTK_PARAM_READABLE));
+                                                       G_PARAM_READABLE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_SUCCESS_COLOR,
                                    g_param_spec_boxed ("success-color",
-                                                       P_("Success color"),
-                                                       P_("Success color for symbolic icons"),
+                                                       _("Success color"),
+                                                       _("Success color for symbolic icons"),
                                                        GDK_TYPE_COLOR,
-                                                       GTK_PARAM_READABLE));
+                                                       G_PARAM_READABLE));
 
   g_object_class_install_property (gobject_class,
 				   PROP_PADDING,
 				   g_param_spec_int ("padding",
-						     P_("Padding"),
-						     P_("Padding that should be put around icons in the tray"),
+						     _("Padding"),
+						     _("Padding that should be put around icons in the tray"),
 						     0,
                                                      G_MAXINT,
                                                      0,
-						     GTK_PARAM_READABLE));
+						     G_PARAM_READABLE));
 
   g_type_class_add_private (class, sizeof (WRGtkTrayIconPrivate));
 }
@@ -991,7 +996,7 @@ _wrgtk_tray_icon_new_for_screen (GdkScreen  *screen,
 }
 
 WRGtkTrayIcon*
-_wrgtk_tray_icon_new (const gchar *name)
+wrgtk_tray_icon_new (const gchar *name)
 {
   return g_object_new (GTK_TYPE_TRAY_ICON, 
 		       "title", name, 
@@ -999,7 +1004,7 @@ _wrgtk_tray_icon_new (const gchar *name)
 }
 
 GtkOrientation
-_wrgtk_tray_icon_get_orientation (WRGtkTrayIcon *icon)
+wrgtk_tray_icon_get_orientation (WRGtkTrayIcon *icon)
 {
   g_return_val_if_fail (GTK_IS_TRAY_ICON (icon), GTK_ORIENTATION_HORIZONTAL);
 

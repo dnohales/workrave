@@ -103,7 +103,9 @@ WindowHints::grab(int num_windows, GdkWindow **windows)
 
 	  delete [] unblocked_windows;
     }
-#else
+#elif defined(HAVE_GTK3)
+  // TODO: gtk3
+#else  
   if (num_windows > 0)
     {
       // Only grab first window.
@@ -153,6 +155,8 @@ WindowHints::ungrab(WindowHints::Grab *handle)
 
 #if defined(PLATFORM_OS_WIN32)
   win32_block_input(FALSE);
+#elif defined(HAVE_GTK3)
+  // TODO: gtk3
 #else
   gdk_keyboard_ungrab(GDK_CURRENT_TIME);
   gdk_pointer_ungrab(GDK_CURRENT_TIME);

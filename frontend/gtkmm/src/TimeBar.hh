@@ -50,26 +50,36 @@ public:
   void get_preferred_size(int &width, int &height);
 
 private:
+#ifdef HAVE_GTK3
+#else  
   void draw_bar(Glib::RefPtr<Gdk::Window> &window,
                 const Glib::RefPtr<Gdk::GC> &gc,
                 bool filled, int x, int y, int width, int height,
                 int winw, int winh);
-
+#endif
   void set_text_color(Gdk::Color color);
   
 protected:
   //Overridden default signal handlers:
   virtual void on_realize();
+
+#ifdef HAVE_GTK3
+  virtual bool on_draw(const Cairo::RefPtr< Cairo::Context >& cr);
+#else
   virtual bool on_expose_event(GdkEventExpose *event);
+#endif  
+
   virtual void on_size_request(GtkRequisition *requisition);
   virtual void on_size_allocate(Gtk::Allocation& allocation);
 
 private:
   static Gdk::Color bar_colors[COLOR_ID_SIZEOF];
 
+#ifndef HAVE_GTK3
   //! Graphic context.
   Glib::RefPtr<Gdk::GC> window_gc;
-
+#endif
+  
   //! Color of the time-bar.
   ColorId bar_color;
 

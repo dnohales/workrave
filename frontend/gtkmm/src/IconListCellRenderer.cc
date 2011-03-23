@@ -56,6 +56,35 @@ IconListCellRenderer::update_properties()
   pixbuf_renderer.property_pixbuf() = property_pixbuf_;
 }
 
+#ifdef HAVE_GTK3
+
+void IconListCellRenderer::get_preferred_width_vfunc(Gtk::Widget &widget, int &minimum_width, int &natural_width) const
+{
+  // TODO: gtk3 port
+}
+
+void IconListCellRenderer::get_preferred_height_for_width_vfunc(Gtk::Widget &widget, int width, int &minimum_height, int &natural_height) const
+{
+  // TODO: gtk3 port
+}
+  
+void IconListCellRenderer::get_preferred_height_vfunc(Gtk::Widget &widget, int &minimum_height, int &natural_height) const
+{
+  // TODO: gtk3 port
+}
+
+void IconListCellRenderer::get_preferred_width_for_height_vfunc(Gtk::Widget &widget, int height, int &minimum_width, int &natural_width) const
+{
+  // TODO: gtk3 port
+}
+
+void IconListCellRenderer::render_vfunc(const Cairo::RefPtr<Cairo::Context> &cr, Gtk::Widget &widget, const Gdk::Rectangle &background_area, const Gdk::Rectangle &cell_area, Gtk::CellRendererState flags)
+{
+  // TODO: gtk3 port
+}
+
+#else
+   
 void
 IconListCellRenderer::get_size_vfunc(Gtk::Widget& widget,
                                      const Gdk::Rectangle* cell_area,
@@ -88,7 +117,6 @@ IconListCellRenderer::get_size_vfunc(Gtk::Widget& widget,
     {
       rect = (GdkRectangle *) cell_area->gobj();
     }
-
 
   GtkCellRenderer *rend = GTK_CELL_RENDERER(text_renderer.gobj());
   gtk_cell_renderer_get_size (rend, widget.gobj(), rect,
@@ -158,3 +186,4 @@ IconListCellRenderer::render_vfunc(
                             (GtkCellRendererState)  flags);
 }
 
+#endif

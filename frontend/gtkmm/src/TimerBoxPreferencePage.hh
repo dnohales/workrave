@@ -23,7 +23,7 @@
 class Configurator;
 namespace Gtk
 {
-  class ComboBox;
+  class ComboBoxText;
   class SpinButton;
   class CheckButton;
 }
@@ -63,8 +63,8 @@ private:
 
   Gtk::CheckButton *ontop_cb;
   Gtk::CheckButton *enabled_cb;
-  Gtk::ComboBox *place_button;
-  Gtk::ComboBox *timer_display_button[BREAK_ID_SIZEOF];
+  Gtk::ComboBoxText *place_button;
+  Gtk::ComboBoxText *timer_display_button[BREAK_ID_SIZEOF];
   Gtk::SpinButton *cycle_entry;
 };
 

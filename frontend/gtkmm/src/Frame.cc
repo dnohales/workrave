@@ -1,6 +1,6 @@
 // FrameWindow.hh --- Gtk::Frame like widget
 //
-// Copyright (C) 2001, 2002, 2003, 2004, 2007 Raymond Penners <raymond@dotsphinx.com>
+// Copyright (C) 2001, 2002, 2003, 2004, 2007, 2011 Raymond Penners <raymond@dotsphinx.com>
 // All rights reserved.
 //
 // This program is free software: you can redistribute it and/or modify
@@ -71,6 +71,7 @@ Frame::set_frame_style(const Style style)
 void
 Frame::set_frame_color(const Gdk::Color &col )
 {
+#ifndef HAVE_GTK3
   frame_color = col;
   if (color_map)
     {
@@ -78,6 +79,7 @@ Frame::set_frame_color(const Gdk::Color &col )
       color_map->alloc_color(frame_color);
 #endif
     }
+#endif
 }
 
 void
@@ -127,6 +129,7 @@ Frame::on_realize()
 {
   Gtk::Bin::on_realize();
 
+#ifndef HAVE_GTK3  
   Glib::RefPtr<Gdk::Window> window = get_window();
   gc = Gdk::GC::create(window);
 
@@ -136,8 +139,10 @@ Frame::on_realize()
   color_map->alloc_color(color_black);
 #endif
   set_frame_color(frame_color);
+#endif  
 }
 
+#ifndef HAVE_GTK3
 void
 Frame::on_size_request(Gtk::Requisition *requisition)
 {
@@ -147,6 +152,7 @@ Frame::on_size_request(Gtk::Requisition *requisition)
   requisition->width += d;
   requisition->height += d;
 }
+#endif
 
 void
 Frame::on_size_allocate(Gtk::Allocation &allocation)
@@ -164,6 +170,15 @@ Frame::on_size_allocate(Gtk::Allocation &allocation)
   widget->size_allocate(alloc);
 }
 
+#ifdef HAVE_GTK3
+bool
+Frame::on_draw(const Cairo::RefPtr< Cairo::Context >& cr)
+{
+  return true;
+}
+    
+#else
+    
 bool
 Frame::on_expose_event(GdkEventExpose* e)
 {
@@ -224,6 +239,7 @@ Frame::on_expose_event(GdkEventExpose* e)
 
   return rc;
 }
+#endif
 
 sigc::signal1<void,bool> &
 Frame::signal_flash()

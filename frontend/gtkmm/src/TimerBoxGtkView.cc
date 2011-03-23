@@ -244,11 +244,16 @@ TimerBoxGtkView::init_table()
 
   Gtk::Requisition label_size;
   Gtk::Requisition bar_size;
-
-  labels[0]->size_request(label_size);
-
   Gtk::Requisition my_size;
+
+#ifdef HAVE_GTK3
+  GtkRequisition natural_size;
+  labels[0]->get_preferred_size(label_size, natural_size);
+  get_preferred_size(my_size, natural_size);
+#else
+  labels[0]->size_request(label_size);
   size_request(my_size);
+#endif
 
   for (int i = 0; i < BREAK_ID_SIZEOF; i++)
     {

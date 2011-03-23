@@ -119,7 +119,7 @@ protected:
   class WrapperType : public DataConnection                             \
   {                                                                     \
   public:                                                               \
-    WrapperType(WidgetType *widget)                                     \
+    WrapperType(WidgetType widget)                                      \
       : widget(widget)                                                  \
       {                                                                 \
       }                                                                 \
@@ -132,16 +132,16 @@ protected:
     void config_changed_notify(const std::string &key);                 \
                                                                         \
   private:                                                              \
-    WidgetType *widget;                                                 \
+    WidgetType widget;                                                  \
   };                                                                    \
                                                                         \
   namespace dc {                                                        \
-    WrapperType *wrap (WidgetType *t);                                  \
+    WrapperType *wrap (WidgetType t);                                   \
   }
 
 #define DEFINE_DATA_TYPE(WidgetType, WrapperType)                       \
   namespace dc {                                                        \
-    WrapperType *wrap (WidgetType *t)                                   \
+    WrapperType *wrap (WidgetType t)                                    \
     {                                                                   \
       if (t != NULL)                                                    \
         {                                                               \
@@ -155,12 +155,12 @@ protected:
   }
 
 
-DECLARE_DATA_TYPE(Gtk::Entry, DataConnectionGtkEntry, std::string);
-DECLARE_DATA_TYPE(Gtk::CheckButton, DataConnectionGtkCheckButton, bool);
-DECLARE_DATA_TYPE(Gtk::SpinButton, DataConnectionGtkSpinButton, int);
-DECLARE_DATA_TYPE(Gtk::ComboBox, DataConnectionGtkComboBox, int);
-DECLARE_DATA_TYPE(Gtk::Adjustment, DataConnectionGtkAdjustment, int);
-DECLARE_DATA_TYPE(TimeEntry, DataConnectionTimeEntry, int);
+DECLARE_DATA_TYPE(Gtk::Entry *, DataConnectionGtkEntry, std::string);
+DECLARE_DATA_TYPE(Gtk::CheckButton *, DataConnectionGtkCheckButton, bool);
+DECLARE_DATA_TYPE(Gtk::SpinButton *, DataConnectionGtkSpinButton, int);
+DECLARE_DATA_TYPE(Gtk::ComboBox *, DataConnectionGtkComboBox, int);
+DECLARE_DATA_TYPE(Glib::RefPtr<Gtk::Adjustment>, DataConnectionGtkAdjustment, int);
+DECLARE_DATA_TYPE(TimeEntry *, DataConnectionTimeEntry, int);
 
 
 class DataConnectionGtkEntryTwin  : public DataConnection

@@ -40,22 +40,29 @@ public:
 
 protected:
   bool on_timer();
-  void on_size_request(Gtk::Requisition *requisition);
   void on_size_allocate(Gtk::Allocation &allocation);
 
+#ifdef HAVE_GTK3
+  bool on_draw(const Cairo::RefPtr< Cairo::Context >& cr);
+#else
   bool on_expose_event(GdkEventExpose* e);
+  void on_size_request(Gtk::Requisition *requisition);
+#endif
+  
   void on_realize();
 
 private:
   //! Frame border width
   guint frame_width;
 
+#ifndef HAVE_GTK3
   //! Graphic context.
-  // Glib::RefPtr<Gdk::GC> gc;
+  Glib::RefPtr<Gdk::GC> gc;
 
   //! Color map
-  //Glib::RefPtr<Gdk::Colormap> color_map;
-
+  Glib::RefPtr<Gdk::Colormap> color_map;
+#endif
+  
   //! Color of the frame.
   Gdk::Color frame_color;
 

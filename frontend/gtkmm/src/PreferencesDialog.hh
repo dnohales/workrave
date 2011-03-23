@@ -71,9 +71,9 @@ private:
   void on_sound_changed();
   void on_block_changed();
 
-  Gtk::ComboBox *sound_button;
-  Gtk::ComboBox *block_button;
-  Gtk::ComboBox *sound_theme_button;
+  Gtk::ComboBoxText *sound_button;
+  Gtk::ComboBoxText *block_button;
+  Gtk::ComboBoxText *sound_theme_button;
   
   // Mode before focus in.
   OperationMode mode;
@@ -131,7 +131,11 @@ private:
   Gtk::CheckButton *mute_cb;
   
   Gtk::FileChooserButton *fsbutton;
+#ifdef HAVE_GTK3
+  Glib::RefPtr<Gtk::FileFilter> filefilter;
+#else
   Gtk::FileFilter *filefilter;
+#endif  
   std::string fsbutton_filename;
   Gtk::CheckButton *trayicon_cb;
   

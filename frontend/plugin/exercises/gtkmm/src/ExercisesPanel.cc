@@ -40,7 +40,7 @@
 // This code can be removed once the following bug is closed:
 // http://bugzilla.gnome.org/show_bug.cgi?id=59390
 
-#include <gtk/gtktextbuffer.h>
+//#include <gtk/gtktextbuffer.h>
 
 static void
 text_buffer_insert_markup_real (GtkTextBuffer *buffer,

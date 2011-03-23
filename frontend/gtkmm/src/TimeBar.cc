@@ -1,6 +1,6 @@
 // TimeBar.cc --- Time Bar
 //
-// Copyright (C) 2002 - 2009 Rob Caelers & Raymond Penners
+// Copyright (C) 2002 - 2009, 2011 Rob Caelers & Raymond Penners
 // All rights reserved.
 //
 // This program is free software: you can redistribute it and/or modify
@@ -83,10 +83,11 @@ void TimeBar::on_realize()
   // We need to call the base on_realize()
   Gtk::DrawingArea::on_realize();
 
+#ifndef HAVE_GTK3  
   // Now we can allocate any additional resources we need
   Glib::RefPtr<Gdk::Window> window = get_window();
   window_gc = Gdk::GC::create(window);
-
+  
   Glib::RefPtr<Gtk::Style> style = get_style();
   Gdk::Color bg = style->get_bg(Gtk::STATE_NORMAL);
   bar_colors[COLOR_ID_BG] = bg;
@@ -97,6 +98,7 @@ void TimeBar::on_realize()
       colormap->alloc_color(bar_colors[i]);
     }
   window->clear();
+#endif
 }
 
 
@@ -126,7 +128,13 @@ TimeBar::on_size_allocate(Gtk::Allocation &allocation)
   //Use the offered allocation for this container:
   set_allocation(allocation);
 
-  if (is_realized())
+  if (
+#ifdef HAVE_GTK3
+      get_realized()
+#else
+      is_realized()
+#endif
+      )
     {
       get_window()->move_resize(allocation.get_x(),
                                 allocation.get_y(),
@@ -167,6 +175,15 @@ TimeBar::get_preferred_size(int &width, int &height)
 }
 
 
+#ifdef HAVE_GTK3
+bool
+TimeBar::on_draw(const Cairo::RefPtr< Cairo::Context >& cr)
+{
+  // TODO: gtk3 port
+  return true;
+}
+#else
+
 //! Draws the timebar
 bool
 TimeBar::on_expose_event(GdkEventExpose *e)
@@ -176,7 +193,6 @@ TimeBar::on_expose_event(GdkEventExpose *e)
   Gtk::Allocation allocation = get_allocation();
 
   Glib::RefPtr<Gdk::Window> window = get_window();
-
   Glib::RefPtr<Gdk::Colormap> colormap = get_colormap();
   for (int i = 0; i < COLOR_ID_SIZEOF; i++)
     {
@@ -401,7 +417,7 @@ TimeBar::on_expose_event(GdkEventExpose *e)
   TRACE_EXIT();
   return true;
 }
-
+#endif
 
 //! Sets the time progress to be displayed.
 void
@@ -486,6 +502,7 @@ void TimeBar::update()
 }
 
 
+#ifndef HAVE_GTK3
 void
 TimeBar::draw_bar(Glib::RefPtr<Gdk::Window> &window,
                   const Glib::RefPtr<Gdk::GC> &gc,
@@ -503,3 +520,4 @@ TimeBar::draw_bar(Glib::RefPtr<Gdk::Window> &window,
       window->draw_rectangle(gc, filled, y, winw - x - width, height, width);
     }
 }
+#endif
