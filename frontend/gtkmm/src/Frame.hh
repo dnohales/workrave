@@ -43,13 +43,21 @@ protected:
   void on_size_allocate(Gtk::Allocation &allocation);
 
 #ifdef HAVE_GTK3
-  bool on_draw(const Cairo::RefPtr< Cairo::Context >& cr);
+  virtual Gtk::SizeRequestMode get_request_mode_vfunc() const;
+  virtual void get_preferred_width_vfunc(int& minimum_width, int& natural_width) const;
+  virtual void get_preferred_height_vfunc(int& minimum_height, int& natural_height) const;
+  virtual void get_preferred_width_for_height_vfunc(int height, int& minimum_width, int& natural_width) const;
+  virtual void get_preferred_height_for_width_vfunc(int width, int& minimum_height, int& natural_height) const;
+  virtual bool on_draw(const Cairo::RefPtr< Cairo::Context >& cr);
+
+  void set_color(const Cairo::RefPtr<Cairo::Context>& cr, const Gdk::Color &color);
+  void set_color(const Cairo::RefPtr<Cairo::Context>& cr, const Gdk::RGBA &color);
 #else
+  void on_realize();
   bool on_expose_event(GdkEventExpose* e);
   void on_size_request(Gtk::Requisition *requisition);
 #endif
   
-  void on_realize();
 
 private:
   //! Frame border width
