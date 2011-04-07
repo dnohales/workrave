@@ -126,35 +126,6 @@ Frame::on_timer()
   return true;
 }
 
-#ifndef HAVE_GTK3  
-void
-Frame::on_realize()
-{
-  Gtk::Bin::on_realize();
-
-  Glib::RefPtr<Gdk::Window> window = get_window();
-  gc = Gdk::GC::create(window);
-
-  color_black.set_rgb(0, 0, 0);
-#if 1 // FIXME: bug66
-  color_map = get_colormap();
-  color_map->alloc_color(color_black);
-#endif
-  set_frame_color(frame_color);
-endif  
-}
-
-void
-Frame::on_size_request(Gtk::Requisition *requisition)
-{
-  Gtk::Widget *widget = get_child();
-  widget->size_request(*requisition);
-  guint d = 2*(get_border_width()+frame_width);
-  requisition->width += d;
-  requisition->height += d;
-}
-#endif
-
 void
 Frame::on_size_allocate(Gtk::Allocation &allocation)
 {
@@ -276,13 +247,6 @@ Frame::on_draw(const Cairo::RefPtr< Cairo::Context >& cr)
       style_context->render_background(cr, 1, 1, width - 2, height -2);
       style_context->render_frame(cr, 1, 1, width - 2, height -2);
 
-      // style->paint_box(window, Gtk::STATE_NORMAL, Gtk::SHADOW_OUT, area,
-      //                  *this, "base", 0, 0,
-      //                  width, height);
-      // style->paint_box(window, Gtk::STATE_NORMAL, Gtk::SHADOW_OUT, area,
-      //                  *this, "base", 0+1, 0+1,
-      //                  width-2, height-2);
-      
       style_context->context_restore();
       break;
     }
@@ -308,6 +272,33 @@ Frame::set_color(const Cairo::RefPtr<Cairo::Context>& cr, const Gdk::RGBA &color
 
 #else
     
+void
+Frame::on_realize()
+{
+  Gtk::Bin::on_realize();
+
+  Glib::RefPtr<Gdk::Window> window = get_window();
+  gc = Gdk::GC::create(window);
+
+  color_black.set_rgb(0, 0, 0);
+#if 1 // FIXME: bug66
+  color_map = get_colormap();
+  color_map->alloc_color(color_black);
+#endif
+  set_frame_color(frame_color);
+endif  
+}
+
+void
+Frame::on_size_request(Gtk::Requisition *requisition)
+{
+  Gtk::Widget *widget = get_child();
+  widget->size_request(*requisition);
+  guint d = 2*(get_border_width()+frame_width);
+  requisition->width += d;
+  requisition->height += d;
+}
+
 bool
 Frame::on_expose_event(GdkEventExpose* e)
 {

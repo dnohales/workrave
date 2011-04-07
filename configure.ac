@@ -412,8 +412,8 @@ then
 			gtk+-3.0 >= 3.0.0
 			gdk-3.0 >= 3.0.0
                         sigc++-2.0 >= 2.2.4.2
-                        glibmm-2.4 >= 2.27.93
-                        gtkmm-3.0 >= 2.99.4,
+                        glibmm-2.4 >= 2.28.0
+                        gtkmm-3.0 >= 3.0.0,
 			have_gtk3=yes,
 			have_gtk3=no)
       if test x$have_gtk3 = xyes

@@ -532,7 +532,7 @@ PreferencesDialog::add_page(const char *label, const char *image,
 void
 PreferencesDialog::on_sound_changed()
 {
-  int idx = sound_button->get_active();
+  int idx = sound_button->get_active_row_number();
   SoundPlayer::set_enabled(idx > 0);
   if (idx > 0)
     {
@@ -548,7 +548,7 @@ PreferencesDialog::on_sound_changed()
 void
 PreferencesDialog::update_senstives()
 {
-  int idx = sound_button->get_active();
+  int idx = sound_button->get_active_row_number();
   if (idx > 0)
     {
       SoundPlayer::Device dev = idx == 1
@@ -578,7 +578,7 @@ PreferencesDialog::update_senstives()
 void
 PreferencesDialog::on_block_changed()
 {
-  int idx = block_button->get_active();
+  int idx = block_button->get_active_row_number();
   GUIConfig::BlockMode m;
   switch (idx)
     {
@@ -832,7 +832,7 @@ void
 PreferencesDialog::on_sound_theme_changed()
 {
   TRACE_ENTER("PreferencesDialog::on_sound_theme_changed");
-  int idx = sound_theme_button->get_active();
+  int idx = sound_theme_button->get_active_row_number();
 
   SoundPlayer::Theme &theme = sound_themes[idx];
 

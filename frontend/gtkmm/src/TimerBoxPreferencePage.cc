@@ -243,7 +243,7 @@ void
 TimerBoxPreferencePage::on_place_changed()
 {
   int slots[BREAK_ID_SIZEOF];
-  int idx = place_button->get_active();
+  int idx = place_button->get_active_row_number();
   switch (idx)
     {
     case 0:
@@ -284,7 +284,7 @@ TimerBoxPreferencePage::on_place_changed()
 void
 TimerBoxPreferencePage::on_display_changed(int break_id)
 {
-  int sel = timer_display_button[break_id]->get_active();
+  int sel = timer_display_button[break_id]->get_active_row_number();
   int flags = 0;
   switch (sel)
     {

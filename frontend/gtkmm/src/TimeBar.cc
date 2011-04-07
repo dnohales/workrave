@@ -76,52 +76,6 @@ TimeBar::~TimeBar()
 }
 
 
-#ifndef HAVE_GTK3  
-void TimeBar::on_realize()
-{
-  // FIXME: for some reason, the timebar get realized EACH TIME
-  //        the timerbox is cycled...
-  // We need to call the base on_realize()
-  Gtk::DrawingArea::on_realize();
-
-  // Now we can allocate any additional resources we need
-  Glib::RefPtr<Gdk::Window> window = get_window();
-  window_gc = Gdk::GC::create(window);
-  
-  Glib::RefPtr<Gtk::Style> style = get_style();
-  Gdk::Color bg = style->get_bg(Gtk::STATE_NORMAL);
-  bar_colors[COLOR_ID_BG] = bg;
-
-  Glib::RefPtr<Gdk::Colormap> colormap = get_colormap();
-  for (int i = 0; i < COLOR_ID_SIZEOF; i++)
-    {
-      colormap->alloc_color(bar_colors[i]);
-    }
-  window->clear();
-}
-
-
-void
-TimeBar::on_size_request(GtkRequisition *requisition)
-{
-  int width, height;
-
-  get_preferred_size(width, height);
-
-  if (rotation == 0 || rotation == 180)
-    {
-      requisition->width = width;
-      requisition->height = height;
-    }
-  else
-    {
-      requisition->width = height;
-      requisition->height = width;
-    }
-}
-#endif
-
-
 void
 TimeBar::on_size_allocate(Gtk::Allocation &allocation)
 {
@@ -227,60 +181,6 @@ TimeBar::get_preferred_height_for_width_vfunc(int /* width */, int &minimum_heig
   get_preferred_height_vfunc(minimum_height, natural_height);
 }
 
-// void
-// TimeBar::on_realize()
-// {
-  // //Do not call base class Gtk::Widget::on_realize().
-  // //It's intended only for widgets that set_has_window(false).
-
-  // set_realized();
-
-  // //Get the themed style from the CSS file:
-  // get_style_property("example_scale", m_scale);
-  // std::cout << "m_scale (example_scale from the theme/css-file) is: "
-  //     << m_scale << std::endl;
-
-  // if(!m_refGdkWindow)
-  // {
-  //   //Create the GdkWindow:
-
-  //   GdkWindowAttr attributes;
-  //   memset(&attributes, 0, sizeof(attributes));
-
-  //   Gtk::Allocation allocation = get_allocation();
-
-  //   //Set initial position and size of the Gdk::Window:
-  //   attributes.x = allocation.get_x();
-  //   attributes.y = allocation.get_y();
-  //   attributes.width = allocation.get_width();
-  //   attributes.height = allocation.get_height();
-
-  //   attributes.event_mask = get_events () | Gdk::EXPOSURE_MASK;
-  //   attributes.window_type = GDK_WINDOW_CHILD;
-  //   attributes.wclass = GDK_INPUT_OUTPUT;
-
-  //   m_refGdkWindow = Gdk::Window::create(get_parent_window(), &attributes,
-  //           GDK_WA_X | GDK_WA_Y);
-  //   set_window(m_refGdkWindow);
-
-  //   //set colors
-  //   override_background_color(Gdk::RGBA("red"));
-  //   override_color(Gdk::RGBA("blue"));
-
-  //   //make the widget receive expose events
-  //   m_refGdkWindow->set_user_data(gobj());
-  // }
-// }
-
-// void
-// TimeBar::on_unrealize()
-// {
-//   // m_refGdkWindow.reset();
-
-//   // //Call base class:
-//   // Gtk::Widget::on_unrealize();
-// }
-
 bool
 TimeBar::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
 {
@@ -318,7 +218,11 @@ TimeBar::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
   cr->rectangle(0, 0, win_w, win_h);
   cr->clip();
 
+  style_context->context_save();
+  style_context->set_state((Gtk::StateFlags)Gtk::STATE_FLAG_ACTIVE);
   style_context->render_frame(cr, 0, 0, win_w - 1, win_h -1);
+  style_context->context_restore();
+  
   set_color(cr, back_color);
   cr->rectangle(border_size, border_size, win_w - 2*border_size, win_h - 2*border_size);
   cr->fill();
@@ -412,13 +316,12 @@ TimeBar::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
 
 
   // Text
-  set_color(cr, bar_text_color);
+  Pango::Matrix matrix = PANGO_MATRIX_INIT;
+  pango_matrix_rotate(&matrix, 360 - rotation);
+
   Glib::RefPtr<Pango::Layout> pl1 = create_pango_layout(bar_text);
   Glib::RefPtr<Pango::Context> pc1 = pl1->get_context();
-
-  Pango::Matrix matrix = PANGO_MATRIX_INIT;
   
-  pango_matrix_rotate(&matrix, 360 - rotation);
   pc1->set_matrix(matrix);
 
   int text_width, text_height;
@@ -487,26 +390,24 @@ TimeBar::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
       rect2 = down_rect;
     }
 
-  //Gdk::Color textcolor = style->get_fg(Gtk::STATE_NORMAL);
+  cr->reset_clip();
+  cr->rectangle(rect1.get_x(), rect1.get_y(), rect1.get_width(), rect1.get_height());
+  cr->clip();
 
-  // TRACE_MSG(textcolor.get_red() << " " <<
-  //           textcolor.get_green() << " " <<
-  //           textcolor.get_blue());
+  cr->move_to(text_x, text_y);
+  set_color(cr, bar_text_color);
+  pl1->show_in_cairo_context(cr);
+ 
+  Gdk::RGBA front_color = style_context->get_color();
+  cr->reset_clip();
+  cr->rectangle(rect2.get_x(), rect2.get_y(), rect2.get_width(), rect2.get_height());
+  cr->clip();
+  cr->move_to(text_x, text_y);
+  set_color(cr, front_color);
+  pl1->show_in_cairo_context(cr);
   
-  // Glib::RefPtr<Gdk::GC> window_gc1 = Gdk::GC::create(window);
-
-  // window_gc1->set_clip_origin(0,0);
-  // window_gc1->set_clip_rectangle(rect1);
-  // window_gc1->set_foreground(bar_text_color);
-  // window->draw_layout(window_gc1, text_x, text_y, pl1);
-
-  // window_gc1->set_foreground(textcolor);
-  // window_gc1->set_clip_rectangle(rect2);
-  // window->draw_layout(window_gc1, text_x, text_y, pl1);
-
-  Gtk::Widget::on_draw(cr);
   TRACE_EXIT();
-  return true;
+  return Gtk::Widget::on_draw(cr);;
 }
 
 void
@@ -541,8 +442,49 @@ TimeBar::draw_bar(const Cairo::RefPtr<Cairo::Context>& cr,
     }
 }
 
-  
 #else
+
+void TimeBar::on_realize()
+{
+  // FIXME: for some reason, the timebar get realized EACH TIME
+  //        the timerbox is cycled...
+  // We need to call the base on_realize()
+  Gtk::DrawingArea::on_realize();
+
+  // Now we can allocate any additional resources we need
+  Glib::RefPtr<Gdk::Window> window = get_window();
+  window_gc = Gdk::GC::create(window);
+  
+  Glib::RefPtr<Gtk::Style> style = get_style();
+  Gdk::Color bg = style->get_bg(Gtk::STATE_NORMAL);
+  bar_colors[COLOR_ID_BG] = bg;
+
+  Glib::RefPtr<Gdk::Colormap> colormap = get_colormap();
+  for (int i = 0; i < COLOR_ID_SIZEOF; i++)
+    {
+      colormap->alloc_color(bar_colors[i]);
+    }
+  window->clear();
+}
+
+void
+TimeBar::on_size_request(GtkRequisition *requisition)
+{
+  int width, height;
+
+  get_preferred_size(width, height);
+
+  if (rotation == 0 || rotation == 180)
+    {
+      requisition->width = width;
+      requisition->height = height;
+    }
+  else
+    {
+      requisition->width = height;
+      requisition->height = width;
+    }
+}
 
 //! Draws the timebar
 bool
@@ -778,7 +720,23 @@ TimeBar::on_expose_event(GdkEventExpose *e)
   return true;
 }
 
+void
+TimeBar::draw_bar(Glib::RefPtr<Gdk::Window> &window,
+                  const Glib::RefPtr<Gdk::GC> &gc,
+                  bool filled, int x, int y, int width, int height,
+                  int winw, int winh)
+{
+  (void) winh;
 
+  if (rotation == 0 || rotation == 180)
+    {
+      window->draw_rectangle(gc, filled, x, y, width, height);
+    }
+  else
+    {
+      window->draw_rectangle(gc, filled, y, winw - x - width, height, width);
+    }
+}
 #endif
 
 //! Sets the time progress to be displayed.
@@ -862,24 +820,3 @@ void TimeBar::update()
 {
   queue_draw();
 }
-
-
-#ifndef HAVE_GTK3
-void
-TimeBar::draw_bar(Glib::RefPtr<Gdk::Window> &window,
-                  const Glib::RefPtr<Gdk::GC> &gc,
-                  bool filled, int x, int y, int width, int height,
-                  int winw, int winh)
-{
-  (void) winh;
-
-  if (rotation == 0 || rotation == 180)
-    {
-      window->draw_rectangle(gc, filled, x, y, width, height);
-    }
-  else
-    {
-      window->draw_rectangle(gc, filled, y, winw - x - width, height, width);
-    }
-}
-#endif
