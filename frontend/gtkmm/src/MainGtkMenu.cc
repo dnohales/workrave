@@ -179,7 +179,8 @@ MainGtkMenu::create_actions()
   
   // Preferences
   action_group->add(Gtk::Action::create("Preferences",
-                                        Gtk::Stock::PREFERENCES),
+                                        Gtk::Stock::PREFERENCES,
+                                        _("_Preferences")),
                     sigc::mem_fun(*menus, &Menus::on_menu_preferences));
 
 #ifdef HAVE_EXERCISES
@@ -193,11 +194,13 @@ MainGtkMenu::create_actions()
                     sigc::mem_fun(*menus, &Menus::on_menu_statistics));
 
   action_group->add(Gtk::Action::create("About",
-                                        Gtk::Stock::ABOUT),
+                                        Gtk::Stock::ABOUT,
+                                        _("_About")),
                     sigc::mem_fun(*menus, &Menus::on_menu_about));
   
   action_group->add(Gtk::Action::create("Quit",
-                                        Gtk::Stock::QUIT),
+                                        Gtk::Stock::QUIT,
+                                        _("_Quit")),
                     sigc::mem_fun(*menus, &Menus::on_menu_quit));
 }
 
