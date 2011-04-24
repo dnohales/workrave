@@ -322,9 +322,8 @@ ExercisesPanel::on_realize()
 {
   Gtk::HBox::on_realize();
 
-  description_text.override_background_color(get_style_context()->get_color());
+  description_text.override_background_color(get_style_context()->get_background_color());
 }
-
 
 ExercisesPanel::~ExercisesPanel()
 {
