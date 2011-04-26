@@ -575,7 +575,7 @@ TimeBar::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
   Gtk::Allocation allocation = get_allocation();
 
   style_context->context_save();
-  style_context->add_class(GTK_STYLE_CLASS_BUTTON);
+  style_context->add_class(GTK_STYLE_CLASS_FRAME);
  
   // Physical width/height
   int win_w = allocation.get_width();
