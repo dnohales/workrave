@@ -574,6 +574,9 @@ TimeBar::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
   Glib::RefPtr<Gtk::StyleContext> style_context = get_style_context();
   Gtk::Allocation allocation = get_allocation();
 
+  style_context->context_save();
+  style_context->add_class(GTK_STYLE_CLASS_BUTTON);
+ 
   // Physical width/height
   int win_w = allocation.get_width();
   int win_h = allocation.get_height();
@@ -789,6 +792,8 @@ TimeBar::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
   cr->move_to(text_x, text_y);
   set_color(cr, front_color);
   pl1->show_in_cairo_context(cr);
+
+  style_context->context_restore();
   
   TRACE_EXIT();
   return Gtk::Widget::on_draw(cr);;
