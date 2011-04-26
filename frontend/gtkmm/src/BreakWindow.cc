@@ -238,10 +238,12 @@ BreakWindow::init_gui()
               set_size_request(head.get_width(),
                                head.get_height());
               set_app_paintable(true);
-
-              // FIXME: GTK3
-              GdkWindow *win = gtk_widget_get_parent_window(GTK_WIDGET(gobj()));
-              set_desktop_background(win);
+#ifdef HAVE_GTK3
+              Glib::RefPtr<Gdk::Window> window = get_window();
+              set_desktop_background(window->gobj());
+#else
+              set_desktop_background(GTK_WIDGET(gobj())->window);
+#endif
               Gtk::Alignment *align
                 = Gtk::manage(new Gtk::Alignment(0.5, 0.5, 0.0, 0.0));
               align->add(*window_frame);
