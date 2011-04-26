@@ -101,7 +101,7 @@ PreludeWindow::PreludeWindow(HeadInfo &head, BreakId break_id)
   color_warn = Gdk::Color("orange");
   color_alert = Gdk::Color("red");
   add(*frame);
-  
+
   switch (break_id)
     {
     case BREAK_ID_MICRO_BREAK:
@@ -200,22 +200,20 @@ PreludeWindow::start()
 
   // Need to realize window before it is shown
   // Otherwise, there is not gobj()...
-  // realize_if_needed();
+  realize_if_needed();
 
-  // // Set some window hints.
-  // set_skip_pager_hint(true);
-  // set_skip_taskbar_hint(true);
+  // Set some window hints.
+  set_skip_pager_hint(true);
+  set_skip_taskbar_hint(true);
 
-  // WindowHints::set_always_on_top(this, true);
+  WindowHints::set_always_on_top(this, true);
 
   refresh();
 
   GtkUtil::center_window(*this, head);
-  frame->show();
-  window_frame->show();
   show_all();
-  
-  // WindowHints::set_always_on_top(this, true);
+
+  WindowHints::set_always_on_top(this, true);
   
   time_bar->set_bar_color(TimeBar::COLOR_ID_OVERDUE);
   
@@ -258,7 +256,11 @@ PreludeWindow::stop()
   TRACE_ENTER("PreludeWindow::stop");
 
   frame->set_frame_flashing(0);
+#ifdef HAVE_GTK3
   hide();
+#else
+  hide_all();
+#endif
 
   TRACE_EXIT();
 }

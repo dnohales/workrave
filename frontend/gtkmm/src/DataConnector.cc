@@ -42,7 +42,13 @@ DEFINE_DATA_TYPE(Gtk::Entry *, DataConnectionGtkEntry);
 DEFINE_DATA_TYPE(Gtk::CheckButton *, DataConnectionGtkCheckButton);
 DEFINE_DATA_TYPE(Gtk::SpinButton *, DataConnectionGtkSpinButton);
 DEFINE_DATA_TYPE(Gtk::ComboBox *, DataConnectionGtkComboBox);
+
+#ifdef HAVE_GTK3
 DEFINE_DATA_TYPE(Glib::RefPtr<Gtk::Adjustment>, DataConnectionGtkAdjustment);
+#else
+DEFINE_DATA_TYPE(Gtk::Adjustment *, DataConnectionGtkAdjustment);
+#endif
+
 DEFINE_DATA_TYPE(TimeEntry *, DataConnectionTimeEntry);
 
 namespace dc

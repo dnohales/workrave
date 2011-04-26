@@ -29,11 +29,11 @@
 
 #include "nls.h"
 
-//#include "gtkx.h"
 #include <X11/Xatom.h>
 #include <cairo-xlib.h>
 
 #include "gtk/gtk.h"
+#include "gtk/gtkx.h"
 #include "gdk/gdk.h"
 
 //#include "gtkintl.h"

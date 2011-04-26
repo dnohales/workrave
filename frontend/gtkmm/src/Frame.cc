@@ -286,7 +286,6 @@ Frame::on_realize()
   color_map->alloc_color(color_black);
 #endif
   set_frame_color(frame_color);
-endif  
 }
 
 void

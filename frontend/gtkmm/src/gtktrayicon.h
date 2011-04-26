@@ -21,7 +21,6 @@
 #define __GTK_TRAY_ICON_H__
 
 #include "gtk/gtk.h"
-#include <gtk/gtkx.h>
 
 G_BEGIN_DECLS
 

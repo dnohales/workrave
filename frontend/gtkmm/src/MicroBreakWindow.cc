@@ -295,8 +295,7 @@ MicroBreakWindow::update_break_window()
       GtkRequisition natural_size;
       label->get_preferred_size(min_size, natural_size);
 #else      
-      GtkRequisition min_size;
-      label->size_request(&min_size);
+      Gtk::Requisition min_size = label->size_request();
 #endif
 
       label->set_size_request(min_size.width, min_size.height);

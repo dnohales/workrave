@@ -46,7 +46,11 @@
 #include "Util.hh"
 
 NetworkLogDialog::NetworkLogDialog()
+#ifdef HAVE_GTK3
   : Gtk::Dialog(_("Network log"), false)
+#else    
+    : Gtk::Dialog(_("Network log"), false, true)
+#endif    
 {
   TRACE_ENTER("NetworkLogDialog::NetworkLogDialog");
 
@@ -93,7 +97,11 @@ NetworkLogDialog::distribution_log(std::string msg)
 {
   Gtk::TextIter iter = text_buffer->end();
   iter = text_buffer->insert(iter, msg);
+#ifdef HAVE_GTK3
   Glib::RefPtr<Gtk::Adjustment> a = scrolled_window.get_vadjustment();
+#else
+  Gtk::Adjustment *a = scrolled_window.get_vadjustment();
+#endif
   a->set_value(a->get_upper());
 }
 
@@ -115,7 +123,11 @@ NetworkLogDialog::init()
         }
 
       dist_manager->add_log_listener(this);
+#ifdef HAVE_GTK3
       Glib::RefPtr<Gtk::Adjustment> a = scrolled_window.get_vadjustment();
+#else
+      Gtk::Adjustment *a = scrolled_window.get_vadjustment();
+#endif
       a->set_value(a->get_upper());
     }
 }

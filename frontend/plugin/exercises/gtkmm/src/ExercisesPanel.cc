@@ -321,8 +321,13 @@ void
 ExercisesPanel::on_realize()
 {
   Gtk::HBox::on_realize();
-
+#ifdef HAVE_GTK3
   description_text.override_background_color(get_style_context()->get_background_color());
+#else
+  description_text.modify_base
+    (Gtk::STATE_NORMAL, get_style()->get_background(Gtk::STATE_NORMAL));
+#endif
+
 }
 
 ExercisesPanel::~ExercisesPanel()

@@ -430,8 +430,6 @@ fi
 
 AM_CONDITIONAL(HAVE_APP_GTKMM, test $config_gtk = yes)
 AM_CONDITIONAL(HAVE_GTK3, test "x$config_gtk3" = "xyes")
-AC_SUBST(GTK_LIBS)
-AC_SUBST(GTK_CFLAGS)
 
 
 dnl

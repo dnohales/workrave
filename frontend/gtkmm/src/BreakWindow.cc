@@ -581,8 +581,11 @@ BreakWindow::stop()
       frame->set_frame_flashing(0);
     }
 
-  // FIXME: GTK3 was hideall()
+#ifdef HAVE_GTK3
   hide();
+#else
+  hide_all();
+#endif
   visible = false;
   
 #ifdef PLATFORM_OS_WIN32

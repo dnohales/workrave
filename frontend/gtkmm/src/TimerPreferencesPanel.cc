@@ -53,11 +53,18 @@ TimerPreferencesPanel::TimerPreferencesPanel
 (BreakId t,
  Glib::RefPtr<Gtk::SizeGroup> hsize_group,
  Glib::RefPtr<Gtk::SizeGroup> vsize_group)
-  : Gtk::VBox(false, 6),
-    max_prelude_adjustment(Gtk::Adjustment::create(0, 1, 100))
-#ifdef HAVE_EXERCISES
+  : Gtk::VBox(false, 6)
+#ifdef HAVE_GTK3    
+  ,max_prelude_adjustment(Gtk::Adjustment::create(0, 1, 100))
+# ifdef HAVE_EXERCISES
   ,exercises_adjustment(Gtk::Adjustment::create(0, 0, 10))
-#endif
+# endif
+#else
+  ,max_prelude_adjustment(0, 1, 100)
+# ifdef HAVE_EXERCISES
+  ,exercises_adjustment(0, 0, 10)
+# endif
+#endif    
 {
   connector = new DataConnector();
   break_id = t;

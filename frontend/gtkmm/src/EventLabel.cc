@@ -109,7 +109,6 @@ EventLabel::on_size_allocate(Gtk::Allocation &allocation)
 
   GtkWidget *widget = GTK_WIDGET(gobj());
 
-  // FIXME: GTK3 was:  if (GTK_WIDGET_REALIZED(widget))
   if (gtk_widget_get_realized (widget))
     {
       gdk_window_move_resize(event_window,
